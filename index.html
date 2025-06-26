@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Virtual Museum</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #fafafa; }
+    .artifact { border-bottom: 1px solid #ccc; padding: 1rem 0; }
+    img { max-width: 200px; display: block; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Virtual Museum: Statues of Mount Nemrut</h1>
+  <div id="gallery">Loading...</div>
+
+  <script>
+    fetch('https://api.sheetbest.com/sheets/7c1eb229-a135-41d5-a9bb-5612b8a93b77')
+      .then(response => response.json())
+      .then(data => {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = '';
+        data.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'artifact';
+          div.innerHTML = `
+            <h2>${item.Name}</h2>
+            <p><strong>Description:</strong> ${item.Description}</p>
+            <p><strong>Findspot:</strong> ${item.Findspot}</p>
+            <p><strong>Date:</strong> ${item.Date}</p>
+            <p><strong>Culture:</strong> ${item.Culture}</p>
+            <img src="${item['Image URL']}" alt="${item.Name}">
+          `;
+          gallery.appendChild(div);
+        });
+      })
+      .catch(error => {
+        document.getElementById('gallery').innerText = 'Failed to load data.';
+        console.error(error);
+      });
+  </script>
+</body>
+</html>
